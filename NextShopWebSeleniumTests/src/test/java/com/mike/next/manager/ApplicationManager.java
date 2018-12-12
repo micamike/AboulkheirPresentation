@@ -10,12 +10,15 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class ApplicationManager {
+public class ApplicationManager{
 
   EventFiringWebDriver wd;
   private String browser;
   private HelperBase helperBase;
   private NavigationHelper navigationHelper;
+  private ItemHelper itemHelper;
+  private BasketHelper basketHelper;
+
   public ApplicationManager(String browser) {
     this.browser = browser;
   }
@@ -23,17 +26,22 @@ public class ApplicationManager {
 
   public void start() {
 
-    if(browser.equals(BrowserType.CHROME)){wd = new EventFiringWebDriver(new ChromeDriver());}
-    else if(browser.equals(BrowserType.FIREFOX)){wd = new EventFiringWebDriver (new FirefoxDriver());}
-    else if(browser.equals(BrowserType.EDGE)){wd = new EventFiringWebDriver(new EdgeDriver());}
+    if (browser.equals(BrowserType.CHROME)) {
+      wd = new EventFiringWebDriver(new ChromeDriver());
+    } else if (browser.equals(BrowserType.FIREFOX)) {
+      wd = new EventFiringWebDriver(new FirefoxDriver());
+    } else if (browser.equals(BrowserType.EDGE)) {
+      wd = new EventFiringWebDriver(new EdgeDriver());
+    }
 
     wd.register(new MyListener());
     helperBase = new HelperBase(wd);
     navigationHelper = new NavigationHelper(wd);
+    itemHelper = new ItemHelper(wd);
+    basketHelper = new BasketHelper(wd);
     wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     //wd.navigate().to("https://www.next.co.il/he");
   }
-
 
 
   public void stop() {
@@ -41,15 +49,21 @@ public class ApplicationManager {
   }
 
 
-  public void opensite(String url){
-  wd.navigate().to(url);
-}
+  public void opensite(String url) {
+    wd.navigate().to(url);
+  }
 
 
   public HelperBase getHelperBase() {
-    return helperBase;}
+    return helperBase;
+  }
 
   public NavigationHelper getNavigationHelper() {
     return navigationHelper;
   }
+
+  public ItemHelper getItemHelper() { return itemHelper;  }
+
+  public BasketHelper getBasketHelper() { return basketHelper; }
+
 }
